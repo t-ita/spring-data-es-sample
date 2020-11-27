@@ -1,4 +1,4 @@
-package com.myexample.springdataessample.repository;
+package com.myexample.springdataessample.repository.elasticsearch;
 
 import com.myexample.springdataessample.domain.model.Member;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;

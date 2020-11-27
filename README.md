@@ -92,7 +92,7 @@ SpringDataEsSampleApplication.java
 package com.myexample.springdataessample;
 
 import com.myexample.springdataessample.domain.model.Member;
-import com.myexample.springdataessample.repository.MemberRepository;
+import com.myexample.springdataessample.repository.elasticsearch.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
