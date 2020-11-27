@@ -21,7 +21,7 @@ kibana: http://localhost:5601/
 
 ### InteilliJ の SpringIntializr でプロジェクト作成
 * Gradle プロジェクトとして作成
-* Spring 2.4 M3 を利用
+* Spring 2.4.0 を利用
 * 以下を依存性に追加
     * SpringBoot DevTools
     * Lombok
