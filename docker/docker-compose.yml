@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+  elasticsearch:
+    build:
+      context: .
+      dockerfile: Dockerfile.elasticsearch
+    environment:
+      - discovery.type=single-node # single-node cluster
+      - cluster.name=docker-cluster # クラスタ名
+      - bootstrap.memory_lock=true #swap設定
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - 9200:9200
+  kibana:
+    build:
+      context: .
+      dockerfile: Dockerfile.kibana
+    ports:
+      - 5601:5601
