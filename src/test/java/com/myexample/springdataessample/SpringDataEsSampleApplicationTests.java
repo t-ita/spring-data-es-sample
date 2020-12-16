@@ -14,6 +14,8 @@ import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -44,30 +46,46 @@ class SpringDataEsSampleApplicationTests {
     }
 
     @Test
+    void testCreateIndex() {
+        IndexCoordinates indexCoordinates = IndexCoordinates.of("member-index");
+        operations.indexOps(indexCoordinates).create();
+    }
+
+    @Test
+    void testCreateMapping() {
+        IndexCoordinates indexCoordinates = IndexCoordinates.of("member-index");
+        operations.indexOps(indexCoordinates).putMapping(Member.class);
+    }
+
+    @Test
     void testAddAlias() {
         IndexCoordinates indexCoordinates = IndexCoordinates.of("member-index");
         operations.indexOps(indexCoordinates)
                 .alias(new AliasActions(
                         new AliasAction.Add(
                                 AliasActionParameters.builder()
-										.withIndices(indexCoordinates.getIndexName())
-										.withAliases("test-alias")
-										.build()
+                                        .withIndices(indexCoordinates.getIndexName())
+                                        .withAliases("test-alias")
+                                        .build()
                         )));
     }
 
     @Test
-	void testRemoveAlias() {
-		IndexCoordinates indexCoordinates = IndexCoordinates.of("member-index");
-		operations.indexOps(indexCoordinates)
-				.alias(new AliasActions(
-						new AliasAction.Remove(
-								AliasActionParameters.builder()
-										.withIndices(indexCoordinates.getIndexName())
-										.withAliases("test-alias")
-										.build()
-						)));
-	}
+    void testRemoveAlias() {
+        IndexCoordinates indexCoordinates = IndexCoordinates.of("member-index");
+        var aliases = operations.indexOps(indexCoordinates).getAliases("test-alias");
+        var aliasDataSets = aliases.entrySet().stream().filter(entry -> entry.getKey().equals("member-index")).collect(Collectors.toList());
+        aliasDataSets.forEach(entry ->
+                entry.getValue().forEach(aliasData ->
+                        operations.indexOps(indexCoordinates)
+                                .alias(new AliasActions(
+                                        new AliasAction.Remove(
+                                                AliasActionParameters.builder()
+                                                        .withIndices(entry.getKey())
+                                                        .withAliases(aliasData.getAlias())
+                                                        .build()
+                                        )))));
+    }
 
     @Test
     void testSave() {
