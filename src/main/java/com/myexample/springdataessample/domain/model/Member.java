@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(indexName = "member-index")
+@Document(indexName = "test-alias", createIndex = false)
 public class Member {
     @Id
     String id;
